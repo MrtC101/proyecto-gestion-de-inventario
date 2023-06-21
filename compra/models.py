@@ -3,8 +3,9 @@ from django.db import models
 # Create your models here.
 class OrdenCompra(models.Model):
     idOrden = models.AutoField(primary_key = True)
-    idPresupuestoOrden = models.ForeignKey("PresupuestoOrdenCompra", on_delete=models.DO_NOTHING)
-    fecha = models.DateField()
+    idInsumo = models.ForeignKey("inventorio.Insumo", on_delete=models.DO_NOTHING)
+    cantidad = models.IntegerFIeld()
+    fechaHora = models.DateField()
 
 class Presupuesto(models.Model):
     idPresupuesto = models.AutoField(primary_key = True)
@@ -18,4 +19,3 @@ class PresupuestoOrdenCompra(models.Model):
     idPresupuesto = models.ForeignKey("Presupuesto", on_delete=models.DO_NOTHING)
     idOrden = models.ForeignKey("OrdenCompra", on_delete=models.DO_NOTHING)
     eleccion = models.BooleanField(default = False)
-
