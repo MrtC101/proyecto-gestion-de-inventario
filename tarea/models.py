@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Empleado(models.Model):
-    empleadoid = models.AutoField(primary_key=True)
+    idEmpleado = models.AutoField(primary_key=True)
     dni = models.IntegerField(unique=True)
     nombre = models.CharField(max_length=255)
     apellido = models.CharField(max_length=255)
@@ -11,7 +11,7 @@ class Empleado(models.Model):
     mail = models.EmailField()
     
 class EncuestaDeSatisfaccion(models.Model):
-    EncuestaDeSatisfaccionid =  models.AutoField(primary_key=True)
+    idEncuestaDeSatisfaccion =  models.AutoField(primary_key=True)
     class EscalaSatisfaccion(models.TextChoices):
         EXELENTE = "EXT"
         BUENO = "BNO"
@@ -38,7 +38,7 @@ class EncuestaDeSatisfaccion(models.Model):
     Observaciones = models.CharField(max_length=255)
 
 class OrdenDeServicio(models.Model):
-    OrdenDeServicio = models.AutoField(primary_key=True)
+    idOrdenDeServicio = models.AutoField(primary_key=True)
     class caraterScale(models.TextChoices):
         URGENTE = "URG"
         NORMAL = "NOR"
