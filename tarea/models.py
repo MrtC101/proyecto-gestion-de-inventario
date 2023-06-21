@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Empleado(models.Model):
+    empleadoid = models.AutoField(primary_key=True)
     dni = models.IntegerField(unique=True)
     nombre = models.CharField(max_length=255)
     apellido = models.CharField(max_length=255)
@@ -10,6 +11,7 @@ class Empleado(models.Model):
     mail = models.EmailField()
     
 class EncuestaDeSatisfaccion(models.Model):
+    EncuestaDeSatisfaccionid =  models.AutoField(primary_key=True)
     class EscalaSatisfaccion(models.TextChoices):
         EXELENTE = "EXT"
         BUENO = "BNO"
@@ -36,6 +38,7 @@ class EncuestaDeSatisfaccion(models.Model):
     Observaciones = models.CharField(max_length=255)
 
 class OrdenDeServicio(models.Model):
+    OrdenDeServicio = models.AutoField(primary_key=True)
     class caraterScale(models.TextChoices):
         URGENTE = "URG"
         NORMAL = "NOR"
@@ -57,6 +60,7 @@ class OrdenDeServicio(models.Model):
     )
 
 class Tarea(models.Model):
+    idTarea = models.AutoField(primary_key=True)
     idEmpleado = models.ManyToManyField("tarea.Empleado",blank=False)
     idSupTarea = models.OneToOneField("tarea.Tarea", verbose_name=("Tarea padre"), on_delete=models.DO_NOTHING,blank=False)
     legajo = models.IntegerField(unique=True)
