@@ -9,7 +9,7 @@ function Dashboard() {
     return (
         <div className="main">
             <Navbar />
-            <div className="container">
+            <div className="container2">
                 <div className="menuContainer">
                     <Sidebar />
                 </div>

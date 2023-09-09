@@ -1,7 +1,12 @@
 import {RouterProvider} from 'react-router-dom'
 
-import "./styles/global.scss"
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import router from './routes/routes'
+import "./styles/global.scss"
+
+
+//
 
 function App(){
     return (

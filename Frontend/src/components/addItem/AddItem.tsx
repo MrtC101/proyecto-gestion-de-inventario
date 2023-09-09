@@ -2,6 +2,8 @@ import { GridColDef } from "@mui/x-data-grid"
 import "./addItem.scss"
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {GetUrlParts,CreateItem as Create} from "../../Api/apiService"
+
 
 type Props = {
     slug: string,
@@ -12,24 +14,16 @@ type Props = {
 
 const AddItem = (props: Props) => {
 
-    interface formDataType { [key: string]: FormDataEntryValue }
-    const responseBody: formDataType = {}
-
+    const {item:itemName} = GetUrlParts();
+    
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         // Prevent the browser from reloading the page
         e.preventDefault();
-        
         const form = e.target as HTMLFormElement;
         const formData = new FormData(form);
-
-        axios.post(`http://127.0.0.1:8000/${props.slug}/`, formData)
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        Create(itemName,formData);
     };
+
 
 
     return (

@@ -10,45 +10,73 @@
         .sectionTitle {
             font-size: 12px;
             font-weight: 200;
-            color: #ffffff;
+            color: $soft-color;
             text-transform: uppercase;
         }
-        
-        .module {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            border-radius: 5px;
-    
-            .moduleTitle {
-                font-size: 12px;
-                font-weight: 200;
-                color: #ffffff;
-                text-transform: uppercase;
-            }
-    
-            &:hover {
-                background-color: $soft-bg;
-            }
-        }
-        
-        .item{
-            display: flex;
-            align-items: right;
-            gap: 10px;
-            padding: 10px;
-            border-radius: 5px;
-    
-            .itemTitle {
-                font-size: 12px;
-                font-weight: 30000;
-                color: #ffffff;
-            }
-            
-            &:hover {
-                background-color: $soft-bg;
-            }
-        }
+        .accordion {
+            --bs-accordion-bg: ;
+            --bs-accordion-border-color: ;
+            --bs-accordion-border-width: 0px ;
+            .accordion-item {
+                .accordion-header {
+                    --bs-accordion-btn-focus-box-shadow: ;
+                    --bs-accordion-active-bg: ;
+                    .accordion-button {
+                        padding: 10px;
+                        .module {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            padding: 0px;
+                            border-radius: 5px;  
+                            .moduleTitle {
+                                font-size: 12px;
+                                font-weight: 200;
+                                color: #ffffff;
+                                text-transform: uppercase;
+                            }
+                        }
+                        &:hover {
+                            background-color: $soft-bg;
+                        }
+                    }
+                }
+                .accordion-collapse {
+
+                    .accordion-body {
+                        padding: 10px;
+                        .item {
+                            display: flex;
+                            align-items: right;
+                            gap: 10px;
+                            padding: 10px;
+                            border-radius: 5px;
+                    
+                            .itemTitle {
+                                font-size: 12px;
+                                font-weight: 30000;
+                                color: #ffffff;
+                            }
+                    
+                            &:hover {
+                                background-color: $soft-bg;
+                            }
+                        }
+                    }
+
+                }
+                
+            }   
+        }     
     }    
+}
+
+.accordion-button::after {
+    background-image: initial;
+    width: 0;
+}
+
+.accordion-button:not(.collapsed)::after {
+    background-image: initial;
+    width: 0;
 }

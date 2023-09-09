@@ -29,7 +29,7 @@ class Insumo(models.Model):
     def __str__(self):
         texto = "{0} ({1})"
         return texto.format(self.tipoInsumo, self.cantidad)
-    
+
 class OrdenRetiro(models.Model):
     id = models.AutoField(primary_key=True)
     insumo = models.ForeignKey(Insumo, on_delete=models.DO_NOTHING)

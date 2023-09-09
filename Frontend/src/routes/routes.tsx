@@ -11,8 +11,9 @@ import Home from "../pages/home/Home";
 import Detail from "../pages/detail/Detail"
 import List from "../pages/list/List"
 import Form from "../pages/form/Form"
+import Delete from "../pages/delete/Delete"
 //import Resume
-import {sideBarContent} from "../components/sidebar/Sidebar";
+import {data as sideBarContent} from "../data/data.tsx";
 
 /**
  * Genera a partir de los elementos del menu lateral las url's correspondientes
@@ -22,13 +23,13 @@ function getRoutes(){
   var routes :RouteObject[] = [];
   sideBarContent.forEach((section) => {
     section.modules.forEach((module) => {
-        /*routes.push(
+        routes.push(
           {
             path:module.url,
-            element:<Resume/>
+            loader: () => {return redirect(module.tables[0].url)}
           }
-        );*/
-        module.items?.forEach((item)=>{
+        );
+        module.tables?.forEach((item)=>{
           routes = routes.concat([
             {
               path: item.url,
@@ -41,6 +42,10 @@ function getRoutes(){
             {
               path: item.url+"/modify/:id/",
               element: <Form/>,
+            },
+            {
+              path: item.url+"/delete/:id/",
+              element: <Delete/>,
             }
           ]);
         })
@@ -53,7 +58,12 @@ function getRoutes(){
 
 
 /**
- * Arreglo que contiene todas las rutas de la aplicación
+ * Arreglo que contiene todas lasconst backendUrls: Record<string,string>  ={
+    "insumos":"/inventario/insumos",
+    "tipos-insumo":"/inventario/tiposInsumo",
+    "Herramientas":"/inventario/herramienta",
+    "Tipo De Herramienta":"/inventario/tipoHerramienta",
+} rutas de la aplicación
  */
 var routes = [
   {

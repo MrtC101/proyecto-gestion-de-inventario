@@ -3,16 +3,16 @@ import "./single.scss"
 
 
 type Props = {
-    id:number;
-    image?: string;
+    id: number;
+    img?: string;
     title: string;
     info: object;
-    chart: {
-        dataKeys:{name:string; color:string}[];
+    chart?: {
+        dataKeys: { name: string; color: string }[];
         data: object[];
     };
-    activities: {time:string, text:string}[];
-}
+    activities?: { time: string; text: string }[];
+};
 
 const Single = (props: Props) => {
     return (
@@ -20,7 +20,6 @@ const Single = (props: Props) => {
             <div className="view">
                 <div className="info">
                     <div className="topInfo">
-                        {props.image && <img src={props.image} alt="" />}
                         <h1>{props.title}</h1>
                         <button>Update</button> 
                     </div>
@@ -83,3 +82,4 @@ const Single = (props: Props) => {
 }
 
 export default Single
+

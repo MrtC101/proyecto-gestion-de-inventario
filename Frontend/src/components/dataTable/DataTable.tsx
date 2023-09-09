@@ -2,6 +2,9 @@ import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { useRef,useState } from "react";
 import "./dataTable.scss"
 import { Link } from "react-router-dom";
+import DeleteItem from "../deleteItem/DeleteItem"
+
+import {GetUrlParts} from "../../Api/apiService"
 
 
 
@@ -12,8 +15,12 @@ type Props = {
 
 export const DataTable = (props: Props) => {
     const containerRef = useRef(null);
+
+    //DELETE HOOKS
     const [open, setOpen] = useState(false);
-    
+    const {item:itemName} = GetUrlParts();
+    //
+
     const actionColumn: GridColDef = {
         field: "action",
         headerName: "Action",
@@ -27,9 +34,11 @@ export const DataTable = (props: Props) => {
                     <Link to={`modify/${params.row.id}/`}>
                         <button className="button"><img src="/edit.png" alt="" /></button>
                     </Link>
-                    <button className="button" onClick={() => setOpen(true)}><img src="/delete.png" alt="" /></button>
+                    <Link to={`delete/${params.row.id}/`}>
+                        <button className="button" ><img src="/delete.png" alt="" /></button>
+                    </Link>
                 </div>
-            )
+                )
         },
     }
 

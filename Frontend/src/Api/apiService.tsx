@@ -1,19 +1,22 @@
 import axios from "axios"
 import {useEffect} from "react";
 import { Link, useParams,useLocation, ActionFunctionArgs } from "react-router-dom";
+import Accordion from 'react-bootstrap/Accordion';
+import {backendUrls} from "../data/data.tsx"
 
 const inventarioAPI = axios.create()
 inventarioAPI.defaults.baseURL = "http://127.0.0.1:8000"
 
-const backendUrls: Record<string,string>  ={
-    "insumos":"/inventario/insumos",
-    "tipos-insumo":"/inventario/tiposInsumo",
-    "Herramientas":"/inventario/herramienta",
-    "Tipo De Herramienta":"/inventario/tipoHerramienta",
+export function GetUrlParts() : any {
+    const location = useLocation()
+    const parts = location.pathname.split("/").filter(part => part !== '');
+    const keys = ["module","item","id"]
+    const objeto = Object.assign({}, ...parts.map((valor, index) => ({ [keys[index]]: valor })));
+    return objeto;
 }
 
 export function ListItems(setItems : any, itemName : string) : any {
-    console.log(itemName)
+    //console.log(itemName)
     useEffect(() => {
         async function loadItems(){
             await inventarioAPI.get(backendUrls[itemName])
@@ -30,7 +33,7 @@ export function ListItems(setItems : any, itemName : string) : any {
 
 export function ReadItem(setItem:any,itemName:string) : any {
     const {id} = useParams()
-    console.log(backendUrls[itemName]+`/${id}`)
+    //console.log(backendUrls[itemName]+`/${id}`)
     useEffect(() => {
         async function loadItem(){
             const jsonItem = await inventarioAPI.get(backendUrls[itemName]+`/${id}`);
@@ -40,18 +43,36 @@ export function ReadItem(setItem:any,itemName:string) : any {
     },[itemName,setItem]);
 }
 
-export function GetUrlParts() : any {
-    const location = useLocation()
-    const parts = location.pathname.split("/").filter(part => part !== '');
-    const keys = ["module","item","id"]
-    const objeto = Object.assign({}, ...parts.map((valor, index) => ({ [keys[index]]: valor })));
-    return objeto;
+export function CreateItem(itemName:string,formData:FormData){   
+    async function createData(itemName :string,formData:FormData){
+        await inventarioAPI.post(backendUrls[itemName], formData)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+    createData(itemName,formData); 
 }
 
-export function DeleteItem(itemName:string,id:number){
-    async function deleteData(itemName :string,id:number){
+export function UpdateItem(itemName:string,formData:FormData,id:string|undefined){   
+    async function updateData(itemName:string,id:string|undefined,formData:FormData){
+        await inventarioAPI.put(backendUrls[itemName] +`/${id}/`, formData)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+    updateData(itemName,id,formData)
+}
+
+export function DeleteItem(itemName:string,id:string){
+    async function deleteData(itemName :string,id:string){
         //Esta funcion puede cambiar
-        await inventarioAPI.delete(backendUrls[itemName] +`${id}/`)
+        await inventarioAPI.delete(backendUrls[itemName] +`/${id}/`)
         .then(function (response) {
             console.log(response);
         })
@@ -61,42 +82,3 @@ export function DeleteItem(itemName:string,id:number){
     }
     deleteData(itemName,id);    
 }
-
-/*
-export async function FormSubmitter({request,params} : any) : Promise<any> {
-    
-    //importante que la url este correcta
-    //No puedo usar hooks en actions ni loaders
-    const {item,module} = GetUrlPartsFromRequest(request);
-    const id = params.id
-    const url = `${module}/${item}/`;
-    
-    //FormData to object
-    let formData = await request.formData();
-    var data : any = {}
-    
-    for ( const [key,val] of formData) {
-        data[key] = val;
-    }
-
-    var result;
-    try{
-        switch(request.method){
-            case "POST":
-                result = await inventarioAPI.post(url,data);
-                break;
-            case "PUT":
-                result = await inventarioAPI.put(url.concat(`${id}/`),data);
-                break;
-            case "DELETE":
-                result = await inventarioAPI.delete(url.concat(`${id}/`));
-                break;
-            default:{}
-        }
-    }catch(error : any){
-        result = error.response.data
-    }
-    <Link to="../../" relative="path"/>
-    console.log(result)
-    return null;
-}*/
