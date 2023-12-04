@@ -27,8 +27,7 @@ function Login() {
         });
         if(r.data["default_password"]){
           nav("/nueva-contraseña")
-        }
-        if(r.data["is_staff"]){
+        }else if(r.data["is_staff"]){
           nav("/")
         }else{
           nav("/orden-servicio")

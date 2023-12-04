@@ -86,7 +86,7 @@ class UsuarioCRUD(LoginRequiredNoRedirect, CustomModelViewSet):
             if not user_instance.is_active:
                 raise ObjectDoesNotExist('Usuario no encontrado para eliminación')
             user_instance.username = create_hash(user_instance.id,user_instance.username);
-            user_instance.legajo = create_hash(user_instance.id,user_instance.legajo);
+            user_instance.legajo = None;
             user_instance.is_active = False
             user_instance.save()
             return Response(status=status.HTTP_204_NO_CONTENT)

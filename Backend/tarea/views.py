@@ -153,7 +153,7 @@ class TareaCommonLogic:
             estado = herramienta_models.EstadoHerramienta(
                     herramienta=herramienta,
                     estado=herramienta_models.StatusScale.DISPONIBLE,
-                    observaciones='Eliminacion de tarea id '+str(pk),
+                    observaciones='Eliminacion de tarea id '+str(tarea.id),
                     created_by=user
                 )
             estado.save()
@@ -164,7 +164,7 @@ class TareaCommonLogic:
             ajuste_stock = inventario_models.AjusteStock(
                     insumo=orden_retiro.insumo,
                     cantidad=orden_retiro.cantidad,
-                    observaciones='Eliminacion de tarea id '+str(pk),
+                    observaciones='Eliminacion de tarea id '+str(tarea.id),
                     accionCantidad=inventario_models.ActionScale.SUMAR,
                     created_by=user
                 )

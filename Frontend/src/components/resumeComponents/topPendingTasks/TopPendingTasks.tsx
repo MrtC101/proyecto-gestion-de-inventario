@@ -14,15 +14,14 @@ const TopPendingTasks = () => {
     
     return (
       <div className="topBox">
-          <h1>Tareas pendientes</h1>
+          <h1>Ordenes de servicio pendientes</h1>
           <div className="list">
               {stats.map((task,key) => (
                   <div className="listItem" key={key}>
                       <div className="task">
                             <div className="identifiers">
-                                <span className="name">{task["id"]}</span>
-                                <span className="type">{task["tipo"]}</span>
-                                <span className="class">{task["clasificacion"]}</span>
+                                <span className="name">{task["fecha"]}</span>
+                                <span className="type">{task["categoria"]}</span>
                             </div>
                             <div className="location">
                                 <span>{task["edificio"]}</span>

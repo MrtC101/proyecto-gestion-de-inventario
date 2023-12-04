@@ -40,21 +40,15 @@ class TareasPendientesUrgentes(LoginRequiredNoRedirect, CustomViewSet):
     def list(self, request):
         query = """
                     SELECT 
-                    tarea_tarea.id,
-                    tarea_tarea.tipo,
-                    tarea_tarea.clasificacion,
-                    tarea_sector.edificio AS edificio,
-                    tarea_sector.nombre AS sector,
+                    fechaGeneracion as fecha,
                     prioridad,
-                    estado
-                    FROM tarea_tarea
-                    INNER JOIN tarea_ordenservicio
-                    ON tarea_tarea.ordenServicio_id=tarea_ordenservicio.id
+                    categoria,
+                    estado,
+                    tarea_sector.nombre as sector,
+                    tarea_sector.edificio as edificio
+                    FROM tarea_ordenservicio
                     INNER JOIN tarea_sector
                     ON tarea_ordenservicio.sector_id=tarea_sector.id 
-                    WHERE estado = "EN_ESPERA" 
-                    OR estado = "APROBADO"
-                    OR estado = "EN_PROGRESO"
                     ORDER BY 
                         CASE prioridad 
                         WHEN "CRITICO" THEN 1
@@ -62,9 +56,9 @@ class TareasPendientesUrgentes(LoginRequiredNoRedirect, CustomViewSet):
                         WHEN "NORMAL" THEN 3
                         END ASC,
                         CASE estado
-                        WHEN "EN_PROGRESO" THEN 1
-                        WHEN "APROBADO" THEN 2
-                        WHEN "EN_ESPERA" THEN 3
+                        WHEN "EN_ESPERA" THEN 1
+                        WHEN "EN_PROGRESO" THEN 2
+                        WHEN "APROBADO" THEN 3
                         END ASC
                     LIMIT 10
                 """

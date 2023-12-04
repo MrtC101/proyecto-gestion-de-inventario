@@ -26,7 +26,7 @@ def ErrorToString(e):
 
 def create_hash(id, val):
     data_to_hash = f"{id}-{val}"
-    hashed_value = hashlib.sha256(data_to_hash.encode()).hexdigest()
+    hashed_value = hashlib.sha256(data_to_hash.encode()).hexdigest()[:8]
     return hashed_value
 
 @login_required

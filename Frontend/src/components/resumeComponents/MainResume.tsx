@@ -18,12 +18,13 @@ function MainResume() {
   return (
     <div className="home">
       <div className="box box1"><TopPendingTasks/></div> 
-      <div className="box box2"><HoursChart/></div>
-      <div className="box box3"><TaskCompletedChart/></div>
-      <div className="box box1"><TopPendingReposition/></div>
       <div className="box box7"><PieConsumed/></div>
+      <div className="box box1"><TopPendingReposition/></div>
     </div>
   )
 }
 
+//<div className="box box2"><HoursChart/></div>
+//<div className="box box3"><TaskCompletedChart/></div>
+      
 export default MainResume;
