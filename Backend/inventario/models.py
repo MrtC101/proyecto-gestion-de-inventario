@@ -31,7 +31,7 @@ class Insumo(CommonModel):
     nombre = models.CharField(max_length=32)
     unidadMedida = models.CharField(max_length=16, choices=MeasuresScale.choices, default=MeasuresScale.CONTABLE)
     cantidad = models.IntegerField(validators=[MinValueValidator(0, message='El valor no puede ser menor a cero')])
-    codigo = models.CharField(max_length=16, null=True)
+    codigo = models.CharField(max_length=16, null=True,unique=True)
     observaciones = models.CharField(max_length=256, null=True)
     puntoReposicion = models.IntegerField(validators=[MinValueValidator(0, message='El valor no puede ser menor a cero')],
                                           null=True)

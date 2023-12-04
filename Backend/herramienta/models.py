@@ -23,7 +23,7 @@ class Herramienta(CommonModel):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=32)
     tipoHerramienta = models.ForeignKey(TipoHerramienta, on_delete=models.DO_NOTHING)
-    codigo = models.CharField(max_length=16, null=True)
+    codigo = models.CharField(max_length=16, null=True,unique=True)
 
     fechaAlta = models.DateField(auto_now_add=True)
     observaciones = models.CharField(max_length=255, null=True)

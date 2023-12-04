@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from . import serializer
 from . import models
-from settings.auxs_fn import ErrorToString
+from settings.auxs_fn import ErrorToString, create_hash
 
 
 class CustomModelViewSet(LoginRequiredNoRedirect, viewsets.ModelViewSet):
@@ -107,6 +107,7 @@ class InsumoCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
     def destroy(self, request, pk):
         try:
             insumo = models.Insumo.objects.get(id=pk)
+            insumo.codigo = create_hash(insumo.id,insumo.codigo)
             insumo.is_active_(raise_exception=True, msg='Insumo no existente')
             return Response(status=status.HTTP_204_NO_CONTENT)
         except IntegrityError:

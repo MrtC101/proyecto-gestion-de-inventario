@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from settings.common_class import LoginRequiredNoRedirect
 from rest_framework import viewsets
 from rest_framework import status
@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from . import serializer
 from . import models
-from settings.auxs_fn import ErrorToString
+from settings.auxs_fn import ErrorToString, create_hash
 from rest_framework.exceptions import APIException
 
 class CustomModelViewSet(LoginRequiredNoRedirect, viewsets.ModelViewSet):
@@ -149,6 +149,7 @@ class HerramientaCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
             estado_herramienta.save()
 
             # deactivate herramienta
+            herramienta.codigo = create_hash(herramienta.id,herramienta.codigo)
             herramienta.estado = models.StatusScale.ELIMINADA
             herramienta.is_active = False
             herramienta.save()
