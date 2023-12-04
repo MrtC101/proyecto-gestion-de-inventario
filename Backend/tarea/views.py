@@ -405,7 +405,6 @@ class TareaCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
             
             # update herramientas and estado
             TareaCommonLogic.update_herramientas(herramientas_data, tarea, herramienta_models.StatusScale.EN_USO)
-            TareaCommonLogic.update_herramientas(herramientas_data, tarea, herramienta_models.StatusScale.EN_USO)
             # update empleados relation (Tiempo)
             TareaCommonLogic.update_empleados_relation(empleados_data, tarea.id, request.user)
             # update insumos
@@ -521,6 +520,7 @@ class OrdenServicioCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
                     tarea.save()
 
             orden_servicio.is_active = False
+            orden_servicio.save()
 
             return Response(status=status.HTTP_204_NO_CONTENT)
         except ObjectDoesNotExist: 
