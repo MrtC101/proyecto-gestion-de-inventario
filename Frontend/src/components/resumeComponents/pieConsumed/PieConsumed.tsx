@@ -6,6 +6,8 @@ import { setMessage } from "../../providerComponents/messageDisplay/MessageDispl
 export const PieConsumed = () => {
     const [stats, setStats] = useState([]);
 
+    const prettyColors = ["#fd7f6f", "#7eb0d5", "#b2e061", "#bd7ebe", "#ffb55a", "#ffee65", "#beb9db", "#fdcce5", "#8bd3c7", "#ededc7"]
+
     useEffect(()=>{
         ListItems(setStats, "stat-consumed")
             .catch((error) => {
@@ -14,12 +16,13 @@ export const PieConsumed = () => {
     },[setStats])
 
     const data = stats.map(
-        (stat) => {
+        (stat, index) => {
+            
             return(
                 {
-                 name: stat["nombre"],
-                 value: stat["cantidadTotal"],
-                 color: '#' + Math.floor(Math.random()*16777215).toString(16) 
+                    name: stat["nombre"],
+                    value: stat["cantidadTotal"],
+                    color: prettyColors[index % prettyColors.length]
                 }
             );
         }
