@@ -42,10 +42,13 @@ class Insumo(CommonModel):
         return texto.format(self.tipoInsumo, self.cantidad)
 
     def update_quantity(self, cantidad, accion=ActionScale.SUMAR):
+        quant = abs(cantidad)
         if accion == ActionScale.SUMAR:
-            self.cantidad += abs(cantidad)
+            self.cantidad += quant
         elif accion == ActionScale.RESTAR:
-            self.cantidad -= abs(cantidad)
+            if self.cantidad - quant < 0:
+                raise Exception('Cantidad excedida')
+            self.cantidad -= quant
         else:
             raise Exception("Acción desconocida sobre cantidad")
 
