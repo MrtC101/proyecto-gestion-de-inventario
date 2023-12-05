@@ -115,6 +115,10 @@ class OrdenServicio(CommonModel):
                                 self.StatusScale.FINALIZADA]: 
                 raise Exception('Orden de servicio en espera, debe aprobarse o rechazarse')
 
+    def is_available(self, raise_exception=True):
+        if self.estado not in [self.StatusScale.APROBADA,
+                               self.StatusScale.EN_ESPERA]:
+            raise Exception('La orden de servicio fue rechazada')
     
 class EncuestaSatisfaccion(models.Model):
     class SatisfactionScale(models.TextChoices):

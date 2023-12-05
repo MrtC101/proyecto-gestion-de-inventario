@@ -319,6 +319,7 @@ class TareaCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
 
             orden_servicio_model = models.OrdenServicio.objects.get(id=orden_servicio_pk)
             orden_servicio_model.is_active_(raise_exception=True, msg='Orden de servicio no encontrada')
+            orden_servicio_model.is_rechazed()
 
             # check previous tarea
             for tarea_iter in models.Tarea.objects.filter(ordenServicio=orden_servicio_model):
