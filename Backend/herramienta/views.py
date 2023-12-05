@@ -217,17 +217,7 @@ class EstadoHerramientaCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
             return Response({'error': ErrorToString(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        try:
-            estado_herramienta = models.EstadoHerramienta.objects.get(id=pk)
-            estado_herramienta.is_active_(raise_exception=True, msg='Estado de herramienta no existente')
-            serializer_class = serializer.EstadoHerramientaSerializer(estado_herramienta, data=request.data)
-            serializer_class.is_valid(raise_exception=True)
-            serializer_class.save()
-            return Response(serializer_class.data)
-        except ObjectDoesNotExist: 
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({'error': ErrorToString(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "La actualización no está permitida"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def destroy(self, request, pk):
         return Response({"error": "La eliminación no está permitida"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
