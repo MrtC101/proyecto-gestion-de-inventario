@@ -116,6 +116,9 @@ class HerramientaCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
             if request.data['estado'] == models.StatusScale.EN_USO:
                 raise Exception('No se puede cambiar una herramienta al estado en uso si no es por medio de una tarea')
 
+            if request.data['estado'] == models.StatusScale.ELIMINADA:
+                raise Exception('Operacion no permitida mediante update')
+
             # create estado entry
             estado_herramienta = models.EstadoHerramienta(
                     herramienta=herramienta,
@@ -133,6 +136,7 @@ class HerramientaCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
             transaction.set_rollback(True)
             return Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
+            transaction.set_rollback(True)
             return Response({'error': ErrorToString(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     @transaction.atomic
