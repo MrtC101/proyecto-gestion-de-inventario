@@ -25,12 +25,12 @@
                     --bs-accordion-btn-focus-box-shadow: ;
                     --bs-accordion-active-bg: ;
                     .accordion-button {
-                        padding: 10px;
+                        padding: 5px;
                         .module {
                             display: flex;
                             align-items: center;
                             gap: 10px;
-                            padding: 0px;
+                            padding: 10px;
                             border-radius: 5px;  
                             
                             .moduleTitle {
