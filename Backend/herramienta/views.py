@@ -100,6 +100,7 @@ class HerramientaCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
         except Exception as e:
             return Response({'error': ErrorToString(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+    @transaction.atomic
     def update(self, request, pk):
         try:
             herramienta = models.Herramienta.objects.get(id=pk)
@@ -111,6 +112,9 @@ class HerramientaCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
             last_estado = models.EstadoHerramienta.objects.filter(herramienta=herramienta).latest('fecha')
             if last_estado.estado == models.StatusScale.EN_USO:
                 raise Exception('No es posible cambiar estado mientras está en uso por una tarea')
+
+            if request.data['estado'] == models.StatusScale.EN_USO:
+                raise Exception('No se puede cambiar una herramienta al estado en uso si no es por medio de una tarea')
 
             # create estado entry
             estado_herramienta = models.EstadoHerramienta(
@@ -126,6 +130,7 @@ class HerramientaCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
             serializer_class.save()
             return Response(serializer_class.data)
         except ObjectDoesNotExist: 
+            transaction.set_rollback(True)
             return Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': ErrorToString(e)}, status=status.HTTP_400_BAD_REQUEST)
