@@ -76,6 +76,10 @@ class HerramientaCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
             serializer_class.is_valid(raise_exception=True)
             
             herramienta = serializer_class.save(created_by=request.user)    
+
+            # cannot create herramienta with estado eliminado
+            if herramienta.estado != models.StatusScale.DISPONIBLE:
+                raise Exception('No se puede crear una herramienta con estado que no sea disponible')
             
             # estado creation
             HerramientaCommonLogic.create_estado_entry(herramienta)
