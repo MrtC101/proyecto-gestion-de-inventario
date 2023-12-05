@@ -93,7 +93,8 @@ class TareaCommonLogic:
                         orden_retiro.insumo.cantidad += diff
 
                         # validate and check
-                        orden_retiro.save(created_by=user)
+                        orden_retiro.created_by=user
+                        orden_retiro.save()
                         orden_retiro.insumo.save()
                     
                     insumos_data.remove(insumo_data)
