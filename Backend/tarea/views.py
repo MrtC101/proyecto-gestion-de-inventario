@@ -216,7 +216,7 @@ class EmpleadoCRUD(CustomModelViewSet):
         try:
             empleado = self.get_object()
             empleado.is_active_(raise_exception=True, msg="Empleado no activo")
-            serializer_class = self.get_serializer(data=request.data)
+            serializer_class = self.get_serializer(empleado, data=request.data, partial=True)
             serializer_class.is_valid(raise_exception=True)
             serializer_class.save()
             return Response(serializer_class.data)
