@@ -39,31 +39,40 @@ class TareaCommonLogic:
 
     def update_herramientas(herramientas_data, tarea, status=None):
         # update herramientas and estado
-        
-        for herramienta_data in herramientas_data:
-            ## update herramienta
-            herramienta = herramienta_models.Herramienta.objects.get(id=int(herramienta_data['herramienta']))
-            herramienta.is_active_(raise_exception=True, msg='Herramienta no disponible')
-            tarea.herramientas.add(herramienta)
 
-            not_added_yet = True
-            for herr in tarea.herramientas.all():
-                if herramienta.id == herr.id:
-                    not_added_yet = False
+        # all herramientas added
+        for herramienta_agregada in tarea.herramientas.all():
+        
+            is_present_in_data = False
+            for herramienta_data in herramientas_data:
+
+                # search herramienta
+                herr_add_id = int(herramienta_data['herramienta'])
+                if herramienta_agregada.id == herr_add_id:
+                    is_present_in_data = True
+                    herramientas_data.remove(herramienta_data)
                     break
 
-            if not_added_yet:
-                if not herramienta.is_available():
-                    raise Exception('La herramienta no está disponible')
+            if not is_present_in_data:
+                # herramienta ahora disponible
+                # no está guardando las fechas adecuadas ni quien modifico la tarea
+                herramienta_agregada.estado = herramienta_models.StatusScale.DISPONIBLE
+                herramienta_agregada.save()
+                tarea.herramientas.remove(herramienta_agregada)
+                HerramientaCommonLogic.create_estado_entry(herramienta_agregada,
+                                                           observaciones='Eliminacion de herramienta de la tarea id '+str(tarea.id))
 
-                if status is None:
-                    herramienta.estado = herramienta_data['estado']
-                else:
-                    herramienta.estado = status
+        # add new herramientas
+        for add_herramienta in herramientas_data:
+            herramienta = herramienta_models.Herramienta.objects.get(id=int(add_herramienta['herramienta']))
+            herramienta.is_active_(raise_exception=True, msg='Herramienta esta eliminada')
+            herramienta.is_available()
+            herramienta.estado = herramienta_models.StatusScale.EN_USO
+            herramienta.save()
+            tarea.herramientas.add(herramienta)
+            HerramientaCommonLogic.create_estado_entry(herramienta,
+                                                       observaciones='Solicitada por tarea id '+str(tarea.id))
 
-                herramienta.save()
-                ## create estado entry
-                HerramientaCommonLogic.create_estado_entry(herramienta)
 
     def create_entry_insumos(insumos_data, tarea_pk, user):
         for insumo_data in insumos_data:
@@ -173,6 +182,8 @@ class TareaCommonLogic:
                     created_by=user
                 )
             ajuste_stock.save()
+            orden_retiro.insumo.update_quantity(orden_retiro.cantidad, inventario_models.ActionScale.SUMAR)
+            orden_retiro.insumo.save()
 
     def restore_empleados(tarea):
         # restore empleados, delete Tiempo entry
@@ -405,9 +416,9 @@ class TareaCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
             empleados_data = json.loads(tarea_update_data.pop('empleados', [])[0])
             insumos_data = json.loads(tarea_update_data.pop('retiros_insumos', [])[0])
 
-            tarea_serializer = serializer.TareaSerializer(tarea, data=tarea_update_data)
+            tarea_serializer = serializer.TareaSerializer(tarea, data=tarea_update_data, partial=True)
             tarea_serializer.is_valid(raise_exception=True)
-            tarea_serializer.save()
+            tarea = tarea_serializer.save()
             
             # update herramientas and estado
             TareaCommonLogic.update_herramientas(herramientas_data, tarea, herramienta_models.StatusScale.EN_USO)
@@ -421,6 +432,8 @@ class TareaCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
                 tarea.ordenServicio.estado = models.OrdenServicio().StatusScale.FINALIZADA
                 tarea.ordenServicio.save()
                 TareaCommonLogic.close_tarea_herramientas(tarea, request.user)
+
+            tarea.save()
 
             return Response(tarea_serializer.data)
         except IntegrityError:

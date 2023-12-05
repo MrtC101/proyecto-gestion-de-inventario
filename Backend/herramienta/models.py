@@ -37,8 +37,13 @@ class Herramienta(CommonModel):
         texto = "{0} [{1}]"
         return texto.format(self.nombre, self.estado)    
     
-    def is_available(self):
-        return self.estado == StatusScale.DISPONIBLE
+    def is_available(self, raise_exception=True):
+        if self.estado != StatusScale.DISPONIBLE:
+            if raise_exception:
+                raise Exception('Herramienta no disponible')
+            return False
+        return True
+
 
 class EstadoHerramienta(CommonModel):
     herramienta = models.ForeignKey(Herramienta, on_delete=models.DO_NOTHING)

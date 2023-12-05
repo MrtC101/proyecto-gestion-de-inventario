@@ -16,12 +16,12 @@ class CustomModelViewSet(LoginRequiredNoRedirect, viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
 
 class HerramientaCommonLogic:
-    def create_estado_entry(herramienta):
+    def create_estado_entry(herramienta, observaciones='Alta de herramienta'):
         # estado creation
         estado_data = {'herramienta': herramienta.id,
                        'fecha': herramienta.fechaAlta,
                        'estado': herramienta.estado,
-                       'observaciones': 'Alta de herramienta',
+                       'observaciones': observaciones,
                        'created_by': herramienta.created_by.id}
         estado_serializer = serializer.EstadoHerramientaSerializer(data=estado_data)
         estado_serializer.is_valid(raise_exception=True)
