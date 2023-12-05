@@ -90,7 +90,10 @@ class TareaCommonLogic:
                         # update quantities
                         diff = orden_retiro.cantidad - insumo_data_cant
                         orden_retiro.cantidad = insumo_data_cant
-                        orden_retiro.insumo.cantidad += diff
+                        if diff > 0:
+                            orden_retiro.insumo.update_quantity(diff, inventario_models.ActionScale.SUMAR)
+                        else:
+                            orden_retiro.insumo.update_quantity(diff, inventario_models.ActionScale.RESTAR)
 
                         # validate and check
                         orden_retiro.created_by=user
