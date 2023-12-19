@@ -40,7 +40,6 @@ const List = () => {
         .catch((error) => {
             setMessage(`Ha surgido un error al buscar ${getPlural(entityName)}.`,error)
         })
-        console.log(items);
     }, [changeRef.current, entityName])
     
     const columns: GridColDef[] = GetColumns(groupName, entityName);
