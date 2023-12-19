@@ -97,7 +97,7 @@ export default function ServiceForm(){
                         <div className="two-fields">                           
                             <Form.Select
                                 ref={edificioSelect}
-                                className="form-select"
+                                className="form-select mx-1"
                                 value={currOption}
                                 required={true}
                                 onChange={changeHandler}
@@ -110,7 +110,7 @@ export default function ServiceForm(){
                                 :null}
                             </Form.Select>
                             
-                            <select required ref={sectorSelect} className="form-select" name="sector" defaultValue={""}>
+                            <select required ref={sectorSelect} className="form-select mx-1" name="sector" defaultValue={""}>
                                 <option value="" defaultValue={""} disabled>Selecciona un Sector</option>
                                 {sectors.map((obj)=><option key={obj.id} value={obj.id}>{obj.nombre}</option>)}
                             </select>
@@ -155,8 +155,8 @@ export default function ServiceForm(){
             </div>
         </div>
         <div className="footer">
-            <span>UNCUYO- Facultad de Ingeniería</span>
-            <img src="/images/Institution_Logo.jpeg" width="430" height="50"/>
+            <span>UNCUYO - Facultad de Ingeniería</span>
+            <img src="/images/Institution_Logo.jpeg"/>
         </div>
         </>
     )
