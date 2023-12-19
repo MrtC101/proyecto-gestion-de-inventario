@@ -48,10 +48,9 @@ function FilteredDataGrid({ filterID, filteredEntity,  setFilterID }): React.Rea
 
     return (
         <>
-            <div className="myTable">
+            <div className="myTable col">
                 <div className="info">
-                    <h1>{getPlural(filteredEntity)}</h1>
-                    {(getACTION(filteredEntity)["add"]) && <button className="btn btn-primary" onClick={() => setOpenAdd(true)}>Agregar {getSingular(filteredEntity)}</button>}
+                    {(getACTION(filteredEntity)["add"]) && <button className="btn btn-primary mb-2" onClick={() => setOpenAdd(true)}>Agregar {getSingular(filteredEntity)}</button>}
                 </div>
 
                 <DataTable slug={filteredEntity} columns={columns} rows={items} setOpenUpdate={setOpenUpdate} setOpenRead={setOpenRead} setOpenDelete={setOpenDelete} setRow={setRow} />
@@ -85,7 +84,7 @@ function ListFilters({ setFilterID, filterName }): React.ReactElement {
     || currWord === "";
 
     return (
-        <div className="Filters">
+        <div className="Filters col-2">
             <Card>
                 <h4>Pedidos de Insumo</h4>
                 <Card className="custom-card">
@@ -121,8 +120,16 @@ const ListByEntity = ({ entityNameToFilterBy, entityNameToList }) => {
     return (
         <>
            <div className="ListByEntity">
-                <ListFilters setFilterID={setFilterID} filterName={entityNameToFilterBy} />
-                <FilteredDataGrid filterID={filterID} filteredEntity={entityNameToList} setFilterID={setFilterID}/>
+            <div className="col">
+                <h1 className="row title">{getPlural(entityNameToList)}</h1>
+                <div className="row">
+                    <ListFilters setFilterID={setFilterID} filterName={entityNameToFilterBy} />
+                    <FilteredDataGrid filterID={filterID} filteredEntity={entityNameToList} setFilterID={setFilterID} />
+
+                </div>
+
+            </div>
+            
             </div>
             
         </>

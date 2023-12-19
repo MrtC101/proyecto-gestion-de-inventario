@@ -8,6 +8,7 @@
     align-items: center;
     justify-content: space-between;
     background-color: $black-soft-bg;
+    margin-bottom: 10px;
     
     .logo {
         
@@ -19,7 +20,6 @@
         gap: 10px;
         img {
             height: 40px;
-            
         }
     }
 
@@ -63,16 +63,22 @@
             margin-bottom: 0px;
             padding-right: 0px;
             padding-left: 0px;
+            display: flex;
             .header{
+                
                 padding: 0px;
                 font-weight: 500;
-                display: block;
+                
                 text-align: center;
                 font-size: 11px;
             }
             .content{
-                display: block;
+               
                 text-align: center;
+                font-size: 12px;
+            }
+            button {
+                width: 100%;
                 font-size: 12px;
             }
         }

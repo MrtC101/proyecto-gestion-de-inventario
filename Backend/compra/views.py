@@ -43,7 +43,7 @@ class PedidoInsumoCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
     def list(self, request):
         try:
             # join
-            pedido_insumo = models.PedidoInsumo.objects.all().order_by('-fechaHora')
+            pedido_insumo = models.PedidoInsumo.objects.all().order_by('fechaHora')
             # serializer
             serializer_class = serializer.PedidoInsumoSerializer(pedido_insumo, many=True, read_only=True)
 
@@ -107,7 +107,7 @@ class PedidoInsumoCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
         try:
             pedido_insumo = models.PedidoInsumo.objects.get(id=pk)
             if pedido_insumo.recibido == models.StatusScale.SI:
-                raise Exception('PedidoInsumo ya recibido, no se pueden efectuar cambios')
+                raise Exception('Pedido de Insumo ya recibido, no se pueden efectuar cambios')
 
             serializer_pedido = serializer.PedidoInsumoSerializer(pedido_insumo, data=request.data)
             serializer_pedido.is_valid(raise_exception=True)
@@ -125,24 +125,44 @@ class PedidoInsumoCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error':str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
+        
+    @transaction.atomic
     def destroy(self, request, pk):
+        detallesBorrados = False
+        presupuestosBorrados = False
         try:
             pedido_insumo = models.PedidoInsumo.objects.get(id=pk)
-
             if pedido_insumo.recibido == models.StatusScale.SI:
-                return Response({"error": "No se puede eliminar un pedido ya recibido"}, status=status.HTTP_400_BAD_REQUEST)
-            for detalles in models.DetallePedido.objects.filter(pedidoInsumo=pedido_insumo).all():
-                detalles.delete()
-
+                return Response({"error": "No se puede eliminar un pedido ya recibido"}, status=status.HTTP_400_BAD_REQUEST)      
+            for detalle in models.DetallePedido.objects.filter(pedidoInsumo=pedido_insumo).all():
+                detalle.delete()
+            detallesBorrados = True
+            for presupuesto in models.Presupuesto.objects.filter(pedidoInsumo=pedido_insumo).all():
+                if (presupuesto.aprobado.upper() == "NO"):
+                    presupuesto.delete()
+                    presupuestosBorrados = True
+                else:
+                    presupuestosBorrados = False
+                    break
+            
             pedido_insumo.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+        
         except IntegrityError:
-            return Response({"error": "No se puede eliminar porque existe una dependencia con otro elemento"}, status=status.HTTP_409_CONFLICT)
-        except Exception as e: 
+            print("1")
+            transaction.set_rollback(True)
+            print("2")
+            if (not detallesBorrados):
+                return Response({"error": "No se puede eliminar porque existe una dependencia con otro elemento. Existe al menos un detalle asociado al pedido."}, status=status.HTTP_409_CONFLICT)
+            elif (not presupuestosBorrados):
+                return Response({"error": "No se puede eliminar porque existe una dependencia con otro elemento. Existe al menos un presupuesto aprobado y asociado al pedido."}, status=status.HTTP_409_CONFLICT)   
+            else:
+                return Response({"error": "No se pudo eliminar un detalle del pedido porque existe una dependencia con otro elemento."}, status=status.HTTP_409_CONFLICT)
+            
+        except Exception as e:
+            transaction.set_rollback(True)
             return Response({"error":str(e)}, status=status.HTTP_404_NOT_FOUND)
 
-    
 class PresupuestoCRUD(CustomModelViewSet):
     serializer_class = serializer.PresupuestoSerializer
     queryset = models.Presupuesto.objects.all()
@@ -159,6 +179,20 @@ class PresupuestoCRUD(CustomModelViewSet):
 
     def __table__():
         return 'presupuesto'
+    
+    def destroy(self, request, pk):  
+        try:
+            presupuesto_insumo = models.Presupuesto.objects.get(id=pk)
+            if (presupuesto_insumo.aprobado.upper() == "SI" ):
+                return Response({"error": "No se puede eliminar un presupuesto ya aprobado"}, status=status.HTTP_400_BAD_REQUEST)
+            presupuesto_insumo.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except IntegrityError:
+            return Response({"error": "No se puede eliminar porque existe una dependencia con otro elemento"}, status=status.HTTP_409_CONFLICT)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        except Except as e:
+            return Response({"error", str(e)}, status=status.HTTP_400_NOT_FOUND)
 
 class DetallePedidoCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
     permission_classes = [IsAdminUser]
@@ -211,5 +245,16 @@ class DetallePedidoCRUD(LoginRequiredNoRedirect, viewsets.ViewSet):
         except Exception as e:
             return Response({'error': ErrorToString(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, pk):
-        return Response({"error": "La eliminación no está permitida"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    def destroy(self, request, pk):  
+        try:
+            pedido_insumo = models.DetallePedido.objects.get(id=pk)
+            pedido_insumo.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except IntegrityError:
+            return Response({"error": "No se puede eliminar porque existe una dependencia con otro elemento"}, status=status.HTTP_409_CONFLICT)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        except Except as e:
+            return Response({"error", str(e)}, status=status.HTTP_400_NOT_FOUND)
+        
+    

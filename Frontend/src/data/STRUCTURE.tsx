@@ -454,8 +454,8 @@ const STRUCTURE: Record<string, Record<string, Record<string, Record<string, any
             "recibido": {
                 editable: true,
                 show: true,
-                name: "recibido",
-                type: "boolean",
+                name: "Recibido",
+                type: "string",
                 col_size: SIZE.TINY,
                 required: true,
                 select : true,
@@ -569,7 +569,7 @@ const STRUCTURE: Record<string, Record<string, Record<string, Record<string, any
                 editable: true,
                 show: true,
                 name: "Aprobado",
-                type: "boolean",
+                type: "string",
                 col_size: SIZE.SMALL,
                 required: true,
                 select: true,
@@ -938,22 +938,13 @@ const STRUCTURE: Record<string, Record<string, Record<string, Record<string, any
                 select: false,
                 enum: false
             },
-            "tarea": {
-                editable: true,
-                show: true,
-                name: "Tarea",
-                type: "number",
-                col_size: SIZE.TINY,
-                required: false,
-                select: true,
-                enum: false
-            },
+            
             "fechaGeneracion": {
                 editable: false,
                 show: true,
                 name: "Fecha de Generación",
                 type: "date",
-                col_size: SIZE.TINY,
+                col_size: SIZE.SMALL,
                 required: true,
                 select: false,
                 enum: false
@@ -981,7 +972,7 @@ const STRUCTURE: Record<string, Record<string, Record<string, Record<string, any
                 show: true,
                 name: "Categoría",
                 type: "number",
-                col_size: SIZE.TINY,
+                col_size: SIZE.SMALL,
                 required: true,
                 select: true,
                 enum: true
@@ -1020,7 +1011,7 @@ const STRUCTURE: Record<string, Record<string, Record<string, Record<string, any
                 show: true,
                 name: "Estado",
                 type: "number",
-                col_size: SIZE.TINY,
+                col_size: SIZE.SMALL,
                 required: true,
                 select: true,
                 enum: true

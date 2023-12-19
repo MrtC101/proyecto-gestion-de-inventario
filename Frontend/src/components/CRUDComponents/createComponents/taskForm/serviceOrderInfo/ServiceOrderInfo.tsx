@@ -64,24 +64,38 @@ export const ServiceOrderInfo = (props:Props) => {
         formData.append("usuario", props.serviceOrder["usuarioID"]);
 
         UpdateItem("ordenes-servicio", formData, props.serviceOrder["id"].toString())
-            .then((response) => { console.log(response)})
+            .then((response) => { console.log(response); window.location.reload(); })
             .catch((error) => { setMessage("Se produjo un error al cambiar el estado de la Orden de servicio.", error) });
-        window.location.reload();
+        
     }
-
 
     return (
             <Col xs={5} className="service-order">
                 <div className="row">
                     <h4 className="col">Orden de servicio</h4>
                     
+                    {props.serviceOrder["estado"] === "FINALIZADA" &&
+                        <div className="col status rounded p-2 bg-success m-1">{props.serviceOrder["estado"]}</div>}
+                    {props.serviceOrder["estado"] === "EN_ESPERA" &&
+                        <div className="col status rounded p-2 bg-secondary m-1">EN ESPERA</div>}
+                    {props.serviceOrder["estado"] === "RECHAZADA" &&
+                        <div className="col status rounded p-2 bg-danger m-1">RECHAZADA</div>}
+                    {props.serviceOrder["estado"] === "APROBADA" &&
+                        <div className="col status rounded p-2 bg-light text-dark m-1">APROBADA</div>}
+                    {props.serviceOrder["estado"] === "EN_PROGRESO" &&
+                        <div className="col status rounded p-2 bg-light text-dark m-1">EN PROGRESO</div>}
+
+                    
+                        
+                                 
+                    
                     {props.action === "create" && (status === "EN_ESPERA" || status === "APROBADA") && (
-                        <Button className="btn btn-danger mx-2 col-4" onClick={changeStatus}>
+                        <Button className="btn btn-danger m-1 p-2 col" onClick={changeStatus}>
                             Rechazar
                         </Button>
                     )}
-                {props.action === "create" && status === "RECHAZADA" && (
-                        <Button className="btn btn-success mx-2 col-4" onClick={changeStatus}>
+                    {props.action === "create" && status === "RECHAZADA" && (
+                        <Button className="btn btn-success m-1 p-2 col" onClick={changeStatus}>
                             Aprobar
                         </Button>
                     )}

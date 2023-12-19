@@ -3,7 +3,12 @@
 
 .ListByEntity{
     display: flex;
+    .title{
+        margin-bottom: 20px;
+    }
     .Filters{
+        min-width: 250px;
+        margin-bottom: 10px;
         h4{
             display: block;
             text-align: center;

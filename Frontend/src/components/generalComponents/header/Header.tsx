@@ -46,7 +46,7 @@ function UserDropDown(){
       <div className="fields">
           <ListGroup>
             <ListGroupItem>
-              <span className="header">Nombre de usuario:</span>
+              <span className="header">Usuario: </span>
               <span className="content">{authData['username']}</span>
             </ListGroupItem>
             <ListGroupItem>
@@ -54,7 +54,7 @@ function UserDropDown(){
               <span className="content">{authData['email']}</span>
             </ListGroupItem>
             <ListGroupItem>
-              <span className="header">Rol:</span>
+              <span className="header">Rol: </span>
               <span className="content">{authData['rol']}</span>
             </ListGroupItem>
             <ListGroupItem>
